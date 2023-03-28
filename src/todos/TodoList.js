@@ -1,6 +1,8 @@
 import React, { useEffect, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
+  completeTodosSelector,
+  inCompleteTodosSelector,
   todosSelectorForData,
   todosSelectorForisLoading,
 } from "../app/selectors";
@@ -24,14 +26,22 @@ const TodoList = () => {
     onDispatchThunk();
   }, [onDispatchThunk]);
 
-  const todosData = useSelector(todosSelectorForData); // Notice here, we got the todos data, instead of setting up a 'mapStateToProps' and 'mapDispatchToProps' for this
+  const todosData = useSelector(todosSelectorForData);
+  const incompleteTodosData = useSelector(inCompleteTodosSelector); // Notice here, we got the todos data, instead of setting up a 'mapStateToProps' and 'mapDispatchToProps' for this
+  const completeTodosData = useSelector(completeTodosSelector);
   const todosIsLoading = useSelector(todosSelectorForisLoading);
+
   return todosIsLoading ? (
     <div>Loading...</div>
   ) : (
     <div className="list-wrapper">
       <NewTodoForm todosData={todosData} />
-      {todosData.map((todo) => (
+      <h2>Incomplete Todos</h2>
+      {incompleteTodosData.map((todo) => (
+        <TodoListItem todo={todo} key={todo.id} />
+      ))}
+      <h2>Completed Todos</h2>
+      {completeTodosData.map((todo) => (
         <TodoListItem todo={todo} key={todo.id} />
       ))}
     </div>
